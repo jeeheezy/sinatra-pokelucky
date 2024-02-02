@@ -1,1 +1,16 @@
 <!-- For pokeball display -->
+<div>
+  <img src="<%= @sprite_url %>" alt="pokeball_sprite">
+</div>
+
+<p>You have found a pokeball. You currently hold <%= @pokeball_count%> in your possession.</p>
+
+<form action="/exploring">
+  <button>Explore further</button>
+</form>
+<form action="/party_and_items">
+  <button>Check Party and Items</button>
+</form>
+<form action="/run" method="post">
+  <button>Return to home</button>
+</form>
