@@ -1,0 +1,10 @@
+<% if @current_encounter!= nil %>
+  <p><%= @former_name.capitalize %> was released! You've been refunded 1 pokeball and now possess <%= @pokeball_count %> pokeballs.</p>
+  <p><%= @name.capitalize%> has been added to the party!</p>
+  <form action="/exploring">
+    <button>Continue exploring</button>
+  </form>
+  <form action="/run" method="post">
+    <button>Return to home</button>
+  </form>
+<% end %>

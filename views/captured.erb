@@ -1,11 +1,9 @@
-<% if current_encounter!= nil %>
-  <% @name = current_encounter["name"] %>
+<% if @current_encounter!= nil %>
   <div>
     <img src="<%= @sprite_url %>" alt="pokeball_sprite">
   </div>
-
-  <p><%= @name %> was caught! Would you like to add <%= @name %> to the party?</p>
-  <form action="/replace_party">
+  <p><%= @name.capitalize %> was caught! Would you like to add <%= @name %> to the party?</p>
+  <form action="/add_party" method="post">
     <button>Yes</button>
   </form>
   <form action="/release">

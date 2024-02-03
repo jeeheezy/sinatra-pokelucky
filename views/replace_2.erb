@@ -1,0 +1,25 @@
+<style>
+  .party_box_layout > * {
+    display: inline; 
+  }
+</style>
+<!-- will need to fine-tune display, prob w some centering on divs, but just doing this rn to have them show up next to each other-->
+<div>
+  <% 6.times do |iterable|%>
+    <p>Slot <%= iterable + 1%>:</p>
+    <div class="party_box_layout">
+      <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen7x/regular/<%= @party[iterable] %>.png" alt="<%= @party[iterable] %> sprite">
+      <p><%= @party[iterable] %></p>
+    </div>
+  <% end %>
+</div>
+
+<p>Which pokemon would you like to release?</p>
+<form action="/release">
+  <label for="slot_number">Enter slot number:</label>
+  <input type="number" name="pokemon_slot" id="slot_number" min="1" max="6">
+  <button>Release</button>
+</form>
+<form action="/replace">
+  <button>Cancel</button>
+</form>

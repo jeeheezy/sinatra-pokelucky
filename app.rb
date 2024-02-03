@@ -6,6 +6,7 @@ require_relative "pokemon_spawn_calc"
 require_relative "capture_formula"
 $saved_encounter = false
 $failed_encounter = false
+$replace_flag = false
 
 get("/") do
   erb(:homepage)
@@ -62,6 +63,14 @@ get("/exploring") do
       # spawn pokemon
       probability_brackets = Pokemon_spawn.new
       @dex_number= probability_brackets.generate_spawn
+      # cookies have size limit (since storing pokemon api info in there isn't optimal) so clearing it out before it becomes too big
+      if cookies.key?("pokemon")
+        # need to clear hash periodically since 4096 should be limit of cookies in domain, including other cookies. Each pokemon info stored ≈ 250 bytes
+        @pokemon_cookie_size= cookies["pokemon"].bytesize
+        if @pokemon_cookie_size * 1.5 > 2500 # multiplying by 1.5 since bytesize returns value that's not reflected in developer tools (prob due to compression and overhead)
+          cookies.delete("pokemon")
+        end
+      end
       if cookies.key?("pokemon")
         pokemon_hash= JSON.parse(cookies["pokemon"])
         if pokemon_hash.key?(@dex_number.to_s)
@@ -138,14 +147,107 @@ post("/run") do
 end
 
 get("/captured") do
-  # can check for pokeball hash here since must be given that pokeball hash exists to capture, otherwise capture button should not render
-  @sprite_url = JSON.parse(cookies["pokeball"])["sprite_url"]
-  current_encounter = cookies["current_encounter"]
+  # capture button should not appear unless enough pokeballs exist. However if user tries to access page directly though url, error might appear, so still conditionally checking for pokeball cookies and current_encounter cookies. Same idea for /release 
+  if cookies.key?("pokeball") && cookies.key?("current_encounter")
+    @sprite_url = JSON.parse(cookies["pokeball"])["sprite_url"]
+    @current_encounter = JSON.parse(cookies["current_encounter"])
+    @name= @current_encounter["name"]
+  end
   erb(:captured)
 end
 
+post("/add_party") do
+  if cookies.key?("current_encounter")
+    @current_encounter = JSON.parse(cookies["current_encounter"])
+    @name= @current_encounter["name"]
+    if cookies.key?("party")
+      current_party = JSON.parse(cookies["party"])  
+      if current_party.length < 6
+        current_party.push(@name)
+      else
+        redirect("/replace")
+      end
+    else
+      current_party = [@name]
+    end
+    cookies["party"] = JSON.generate(current_party)
+    redirect("/add_successful")
+  end
+end
+
+get("/add_successful") do
+  if cookies.key?("current_encounter")
+    @current_encounter = JSON.parse(cookies["current_encounter"])
+    @name = @current_encounter["name"]
+    erb(:add_successful)
+  end
+end
+
+get("/replace") do
+  if $replace_flag
+    $replace_flag = false
+    @party = JSON.parse(cookies["party"])
+    erb(:replace_2)
+    # insert code for replacing pokemon here
+  else
+    if cookies.key?("current_encounter")
+      @current_encounter = JSON.parse(cookies["current_encounter"])
+      @name = @current_encounter["name"]
+      erb(:replace)
+    end
+  end
+end
+
+post("/replace_continued") do
+  $replace_flag = true
+  redirect("/replace")
+end
+
 get("/release") do
+  if params["pokemon_slot"]
+    slot_number = params["pokemon_slot"].to_i
+    params.delete("pokemon_slot")
+    party = JSON.parse(cookies["party"])
+    @former_name = party[slot_number - 1]
+    @current_encounter = JSON.parse(cookies["current_encounter"])
+    @name= @current_encounter["name"]
+    party[slot_number - 1] = @name
+    cookies["party"] = JSON.generate(party)
+    pokeball_hash = JSON.parse(cookies["pokeball"])
+    @pokeball_count = (pokeball_hash["count"]) + 1
+    pokeball_hash["count"] = @pokeball_count
+    cookies["pokeball"] = JSON.generate(pokeball_hash)
+    erb(:release_2)
+  else
+    if cookies.key?("current_encounter")
+      @current_encounter = JSON.parse(cookies["current_encounter"])
+      @name= @current_encounter["name"]
+      pokeball_hash = JSON.parse(cookies["pokeball"])
+      @pokeball_count = (pokeball_hash["count"]) + 1
+      pokeball_hash["count"] = @pokeball_count
+      cookies["pokeball"] = JSON.generate(pokeball_hash)
+    end
+    erb(:release)
+  end
 end
 
 get("/party_and_items") do
+  cookies.delete("current_encounter")
+  if cookies.key?("party")
+    @party = JSON.parse(cookies["party"])
+    # using array since apparently array iteration faster than hash iteration and realistically only need the values anyway
+  else
+    @party = []
+  end
+  if cookies.key?("pokeball")
+    pokeball_hash = JSON.parse(cookies["pokeball"])
+    @sprite_url = pokeball_hash["sprite_url"]
+    @pokeball_count = (pokeball_hash["count"])
+  else
+    @sprite_url = PokeApi.get(item: 'poke-ball').sprites.default
+    @pokeball_count = 0
+    pokeball_hash = {"sprite_url" => @sprite_url, "count" => @pokeball_count}
+    cookies["pokeball"] = JSON.generate(pokeball_hash)
+  end
+  erb(:party_and_items)
 end

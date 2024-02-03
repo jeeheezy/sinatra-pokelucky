@@ -1,0 +1,12 @@
+<% if @current_encounter!= nil %>
+  <p><%= @name.capitalize %> was successfully added to the party!</p>
+  <form action="/exploring">
+    <button>Continue exploring</button>
+  </form>
+  <form action="/party_and_items">
+    <button>Check Party and Items</button>
+  </form>
+  <form action="/run" method="post">
+    <button>Return to home</button>
+  </form>
+<% end %>

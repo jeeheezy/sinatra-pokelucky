@@ -2,13 +2,16 @@
   <img src="<%= @sprite_url %>" alt="pokemon_sprite">
 </div>
 
-<p><%= @name %> was not caught. Would you like to try again?</p>
+<p><%= @name.capitalize %> was not caught. Would you like to try again?</p>
 <p>Pokeballs: <%= @pokeball_count%></p>
 <% if @pokeball_count > 0%>
   <form action="/catch" method="post">
     <button>Catch</button>
   </form>
 <% end %>
+<form action="/exploring">
+  <button>Continue exploring</button>
+</form>
 <form action="/run" method="post">
   <button>Run</button>
 </form>

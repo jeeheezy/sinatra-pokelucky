@@ -44,3 +44,8 @@ pp capture(255, 80)
 #     count
 #   }
 # }
+
+# accessed from homescreen, pokeball, or failed capture
+{ #cookies
+  "party" => []
+}
