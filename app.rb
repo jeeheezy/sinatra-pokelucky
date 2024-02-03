@@ -187,6 +187,9 @@ get("/replace") do
   if $replace_flag
     $replace_flag = false
     @party = JSON.parse(cookies["party"])
+    if cookies["current_encounter"]
+      @current_encounter = true
+    end
     erb(:replace_2)
     # insert code for replacing pokemon here
   else
@@ -208,16 +211,27 @@ get("/release") do
     slot_number = params["pokemon_slot"].to_i
     params.delete("pokemon_slot")
     party = JSON.parse(cookies["party"])
-    @former_name = party[slot_number - 1]
-    @current_encounter = JSON.parse(cookies["current_encounter"])
-    @name= @current_encounter["name"]
-    party[slot_number - 1] = @name
-    cookies["party"] = JSON.generate(party)
-    pokeball_hash = JSON.parse(cookies["pokeball"])
-    @pokeball_count = (pokeball_hash["count"]) + 1
-    pokeball_hash["count"] = @pokeball_count
-    cookies["pokeball"] = JSON.generate(pokeball_hash)
-    erb(:release_2)
+    if cookies.key?("current_encounter")
+      @former_name = party[slot_number - 1]
+      @current_encounter = JSON.parse(cookies["current_encounter"])
+      @name= @current_encounter["name"]
+      party[slot_number - 1] = @name
+      cookies["party"] = JSON.generate(party)
+      pokeball_hash = JSON.parse(cookies["pokeball"])
+      @pokeball_count = (pokeball_hash["count"]) + 1
+      pokeball_hash["count"] = @pokeball_count
+      cookies["pokeball"] = JSON.generate(pokeball_hash)
+      erb(:release_2)
+    else
+      @name = party[slot_number - 1]
+      party.delete_at(slot_number - 1)
+      cookies["party"] = JSON.generate(party)
+      pokeball_hash = JSON.parse(cookies["pokeball"])
+      @pokeball_count = (pokeball_hash["count"]) + 1
+      pokeball_hash["count"] = @pokeball_count
+      cookies["pokeball"] = JSON.generate(pokeball_hash)
+      erb(:release)
+    end
   else
     if cookies.key?("current_encounter")
       @current_encounter = JSON.parse(cookies["current_encounter"])
@@ -226,8 +240,11 @@ get("/release") do
       @pokeball_count = (pokeball_hash["count"]) + 1
       pokeball_hash["count"] = @pokeball_count
       cookies["pokeball"] = JSON.generate(pokeball_hash)
+      erb(:release)
+    else
+      @party = JSON.parse(cookies["party"])
+      erb(:replace_2)
     end
-    erb(:release)
   end
 end
 
