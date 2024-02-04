@@ -13,7 +13,7 @@
   <div class="party_item_bottom">
   <p>Which pokemon would you like to release?</p>
     <form action="/release" class="release_button_form">
-      <label for="slot_number">Enter slot number:</label>
+      <label for="slot_number" class="release_button_label">Enter slot number:</label>
       <input type="number" name="pokemon_slot" id="slot_number" min="1" max="<%= @party.length%>">
       <button class="release_button">Release</button>
     </form>
