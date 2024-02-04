@@ -1,9 +1,11 @@
-<%# if @current_encounter!= nil %>
+<div class="split_screen">
   <p><%= @name.capitalize %> was released! You've been refunded 1 pokeball and now possess <%= @pokeball_count %> pokeballs.</p>
-  <form action="/exploring">
+</div>
+<div class="split_screen">
+  <form action="/exploring" class="button_forms">
     <button>Continue exploring</button>
   </form>
-  <form action="/run" method="post">
+  <form action="/run" method="post" class="button_forms">
     <button>Return to home</button>
   </form>
-<%# end %>
+</div>

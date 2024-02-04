@@ -1,10 +1,14 @@
 <% if @current_encounter!= nil %>
-  <p><%= @former_name.capitalize %> was released! You've been refunded 1 pokeball and now possess <%= @pokeball_count %> pokeballs.</p>
-  <p><%= @name.capitalize%> has been added to the party!</p>
-  <form action="/exploring">
-    <button>Continue exploring</button>
-  </form>
-  <form action="/run" method="post">
-    <button>Return to home</button>
-  </form>
+  <div class="split_screen">
+    <p><%= @former_name.capitalize %> was released! You've been refunded 1 pokeball and now possess <%= @pokeball_count %> pokeballs.</p>
+    <p><%= @name.capitalize%> has been added to the party!</p>
+  </div>
+  <div class="split_screen">
+    <form action="/exploring" class="button_forms">
+      <button>Continue exploring</button>
+    </form>
+    <form action="/run" method="post" class="button_forms">
+      <button>Return to home</button>
+    </form>
+  </div>
 <% end %>

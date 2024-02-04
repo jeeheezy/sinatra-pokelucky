@@ -1,31 +1,30 @@
-<style>
-  .party_box_layout > * {
-    display: inline; 
-  }
-</style>
-<!-- will need to fine-tune display, prob w some centering on divs, but just doing this rn to have them show up next to each other-->
-<div>
-  <% @party.length.times do |iterable|%>
-    <p>Slot <%= iterable + 1%>:</p>
-    <div class="party_box_layout">
-      <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen7x/regular/<%= @party[iterable] %>.png" alt="<%= @party[iterable] %> sprite">
-      <p><%= @party[iterable] %></p>
+<div class="view_party">
+  <div class="party_item_top">
+    <% @party.length.times do |iterable|%>
+    <div class="slot_and_sprite">
+      <p class="slot">Slot <%= iterable + 1%>:</p>
+      <div class="party_box_layout">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen7x/regular/<%= @party[iterable] %>.png" alt="<%= @party[iterable] %> sprite" class="pokemon_box_sprite">
+        <p><%= @party[iterable] %></p>
+      </div>
     </div>
-  <% end %>
+    <% end %>
+  </div>
+  <div class="party_item_bottom">
+  <p>Which pokemon would you like to release?</p>
+    <form action="/release" class="release_button_form">
+      <label for="slot_number">Enter slot number:</label>
+      <input type="number" name="pokemon_slot" id="slot_number" min="1" max="<%= @party.length%>">
+      <button class="release_button">Release</button>
+    </form>
+    <% if @current_encounter!= nil %>
+    <form action="/replace" class="button_forms">
+      <button>Cancel</button>
+    </form>
+    <% else %>
+    <form action="/party_and_items" class="button_forms">
+      <button>Cancel</button>
+    </form>
+    <% end %>
+  </div>
 </div>
-
-<p>Which pokemon would you like to release?</p>
-<form action="/release">
-  <label for="slot_number">Enter slot number:</label>
-  <input type="number" name="pokemon_slot" id="slot_number" min="1" max="<% @party.length%>">
-  <button>Release</button>
-</form>
-<% if @current_encounter!= nil %>
-<form action="/replace">
-  <button>Cancel</button>
-</form>
-<% else %>
-<form action="/party_and_items">
-  <button>Cancel</button>
-</form>
-<% end %>

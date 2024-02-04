@@ -1,12 +1,14 @@
 <% if @current_encounter!= nil %>
-  <div>
+  <div class="pokeball split_screen">
     <img src="<%= @sprite_url %>" alt="pokeball_sprite">
+    <p><%= @name.capitalize %> was caught! Would you like to add <%= @name %> to the party?</p>
   </div>
-  <p><%= @name.capitalize %> was caught! Would you like to add <%= @name %> to the party?</p>
-  <form action="/add_party" method="post">
-    <button>Yes</button>
-  </form>
-  <form action="/release">
-    <button>No</button>
-  </form>
+  <div class="split_screen">
+    <form action="/add_party" method="post" class="button_forms">
+      <button>Yes</button>
+    </form>
+    <form action="/release" class="button_forms">
+      <button>No</button>
+    </form>
+  </div>
 <% end %>

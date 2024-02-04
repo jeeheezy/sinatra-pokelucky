@@ -1,18 +1,19 @@
 <!-- For pokemon display -->
-<div>
+<div class="split_screen">
   <img src="<%= @sprite_url %>" alt="pokemon_sprite">
+  <p>You have found a(n) <%= @name %>. Would you like to capture it?</p>
+  <p>Pokeballs: <%= @pokeball_count%></p>
 </div>
-
-<p>You have found a(n) <%= @name %>. Would you like to capture it?</p>
-<p>Pokeballs: <%= @pokeball_count%></p>
-<% if @pokeball_count > 0%>
-  <form action="/catch" method="post">
-    <button>Catch</button>
+<div class="split_screen">
+  <% if @pokeball_count > 0%>
+    <form action="/catch" method="post" class="button_forms">
+      <button>Catch</button>
+    </form>
+  <% end %>
+  <form action="/exploring" class="button_forms">
+    <button>Continue exploring</button>
   </form>
-<% end %>
-<form action="/exploring">
-  <button>Continue exploring</button>
-</form>
-<form action="/run" method="post">
-  <button>Run</button>
-</form>
+  <form action="/run" method="post" class="button_forms">
+    <button>Run</button>
+  </form>
+</div>

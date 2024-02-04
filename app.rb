@@ -4,6 +4,7 @@ require "sinatra/cookies"
 require "poke-api-v2"
 require_relative "pokemon_spawn_calc"
 require_relative "capture_formula"
+# using global variables because need a flag that can be carried over from path to path to determine if there was a previous process in place to reuse some code
 $saved_encounter = false
 $failed_encounter = false
 $replace_flag = false
@@ -160,6 +161,7 @@ post("/add_party") do
   if cookies.key?("current_encounter")
     @current_encounter = JSON.parse(cookies["current_encounter"])
     @name= @current_encounter["name"]
+    # if there's currently a party, check if party full (6 size max). If party full, will redirect to replace 
     if cookies.key?("party")
       current_party = JSON.parse(cookies["party"])  
       if current_party.length < 6
@@ -184,6 +186,7 @@ get("/add_successful") do
 end
 
 get("/replace") do
+  # check replace flag to determine who you'd like to release in party for new capture
   if $replace_flag
     $replace_flag = false
     @party = JSON.parse(cookies["party"])
@@ -191,8 +194,8 @@ get("/replace") do
       @current_encounter = true
     end
     erb(:replace_2)
-    # insert code for replacing pokemon here
   else
+    # brings to screen where you confirm whether you'd like to replace a party member; canceling will bring back to captured monster screen otherwise will set replace flag and then bring back to this method for a different screen
     if cookies.key?("current_encounter")
       @current_encounter = JSON.parse(cookies["current_encounter"])
       @name = @current_encounter["name"]
@@ -207,6 +210,7 @@ post("/replace_continued") do
 end
 
 get("/release") do
+  # if process to release pokemon has already been run through and a slot has been selected, will then check if you are just releasing from party or if there's a captured encounter that's replacing the slot that's just been freed
   if params["pokemon_slot"]
     slot_number = params["pokemon_slot"].to_i
     params.delete("pokemon_slot")
@@ -233,6 +237,7 @@ get("/release") do
       erb(:release)
     end
   else
+    # logic for releasing the recently captured pokemon (i.e. you did not add to party after capture)
     if cookies.key?("current_encounter")
       @current_encounter = JSON.parse(cookies["current_encounter"])
       @name= @current_encounter["name"]
@@ -242,6 +247,7 @@ get("/release") do
       cookies["pokeball"] = JSON.generate(pokeball_hash)
       erb(:release)
     else
+      # first process of releasing a pokemon in party, where you are led to screen prompt on which pokemon you'd like to release
       @party = JSON.parse(cookies["party"])
       erb(:replace_2)
     end

@@ -1,0 +1,119 @@
+:root {
+  font-family: "Press Start 2P", system-ui;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: black;
+}
+
+p {
+  text-align: center;
+}
+
+/* div {
+  background-color: white;
+} */
+
+.outer_div {
+  background-color: rgb(252, 100, 100);
+  height: 35rem;
+  width: 30rem;
+  border-radius: 3rem;
+  display: grid;
+  grid-auto-rows: 1fr;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.view_party {
+  display: grid;
+  grid-template-rows: 1.5fr 1fr
+}
+
+.split_screen {
+  display:flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pokeball{
+  justify-content: center;
+}
+
+.pokeball_count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.party_box_layout {
+  display: flex; 
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.party_item_top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.party_item_bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pokemon_box_sprite {
+  padding-bottom: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.slot {
+  margin: 0;
+  text-decoration: underline;
+}
+
+.slot_and_sprite {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.button_forms {
+  width: 100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  width: 50%;
+  padding: 1rem 0;
+  background-color: white;
+  border-radius: 2rem;
+  font-family: "Press Start 2P", system-ui;
+}
+
+.release_button_form {
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.release_button {
+  width: 25%
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: yellow;
+}

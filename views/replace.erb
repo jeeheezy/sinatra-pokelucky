@@ -1,9 +1,13 @@
 <% if @current_encounter!= nil %>
-  <p>To add <%= @name %> to the party, you must release one of your six party members. Would you like to release a pokemon?</p>
-  <form action="/replace_continued" method="post">
-    <button>Yes</button>
-  </form>
-  <form action="/captured">
-    <button>No</button>
-  </form>
+  <div class="split_screen">
+    <p>To add <%= @name %> to the party, you must release one of your six party members. Would you like to release a pokemon?</p>
+  </div>
+  <div class="split_screen">
+    <form action="/replace_continued" method="post" class="button_forms">
+      <button>Yes</button>
+    </form>
+    <form action="/captured" class="button_forms">
+      <button>No</button>
+    </form>
+  </div>
 <% end %>

@@ -1,28 +1,24 @@
-<!-- for party and pokeball display -->
-<style>
-  .party_box_layout > * {
-    display: inline; 
-  }
-</style>
-<!-- will need to fine-tune display, prob w some centering on divs, but just doing this rn to have them show up next to each other-->
-<div>
-  <% @party.each do |pokemon_name| %>
-    <div class="party_box_layout">
-      <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen7x/regular/<%= pokemon_name %>.png" alt="<%= pokemon_name %> sprite">
-      <p><%= pokemon_name %></p>
+<div class="view_party">
+  <div class="party_item_top">
+    <% @party.each do |pokemon_name| %>
+      <div class="party_box_layout">
+        <img src="https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen7x/regular/<%= pokemon_name %>.png" alt="<%= pokemon_name %> sprite" class="pokemon_box_sprite">
+        <p><%= pokemon_name %></p>
+      </div>
+    <% end %>
+  </div>
+  <div class="party_item_bottom">
+    <div class="pokeball_count">
+      <img src="<%= @sprite_url %>" alt="pokeball_sprite">
+      <p>: <%= @pokeball_count%></p>
     </div>
-  <% end %>
-  <div class="party_box_layout">
-    <img src="<%= @sprite_url %>" alt="pokeball_sprite">
-    <p>: <%= @pokeball_count%></p>
+    <% if @party.length > 0%>
+      <form action="/release" class="button_forms">
+        <button>Release party member</button>
+      </form>
+    <% end %>
+    <form action="/run" method="post" class="button_forms">
+      <button>Return to home</button>
+    </form>
   </div>
 </div>
-
-<% if @party.length > 0%>
-  <form action="/release">
-    <button>Release party member</button>
-  </form>
-<% end %>
-<form action="/run" method="post">
-  <button>Return to home</button>
-</form>
