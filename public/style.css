@@ -105,7 +105,7 @@ button {
   justify-content: space-between;
 }
 
-release_button_label {
+.release_button_label {
   font-size: 0.75rem;
 }
 
